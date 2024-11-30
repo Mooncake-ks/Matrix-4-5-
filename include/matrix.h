@@ -1,12 +1,10 @@
 #pragma once
-
-class Matrix
-{
-	public:
+#include <iostream>
+class Matrix {
+public:
 	Matrix();
 	Matrix(int row, int col);
 	Matrix(const Matrix& other);
-	Matrix(const std::initializer_list<std::initializer_list<double>>& list);
 
 	Matrix& operator =(const Matrix& other);
 	Matrix operator *(const Matrix& other)const;
@@ -16,7 +14,8 @@ class Matrix
 	bool operator!=(const Matrix& other) const;
 	double* operator [](int index);
 
-	void cleer(Matrix& other);
+	void clear(Matrix& other);
+	void clear();
 	double** creature(int row, int col);
 	void copy(Matrix& other, const Matrix& other_2);
 	void transpose();
