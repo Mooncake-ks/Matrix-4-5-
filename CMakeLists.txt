@@ -5,9 +5,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(SOURCES 
 	src/main.cpp
 	src/matrix.cpp
+	src/square_matrix.cpp
 )
 set(HEADERS
 	include/matrix.h
+	include/square_matrix.h
 )
 
 include_directories("include/")
