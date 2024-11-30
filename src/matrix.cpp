@@ -1,4 +1,4 @@
-#include "Matrix.h"
+#include "matrix.h"
 
 Matrix::Matrix() :row{ 0 }, col{ 0 }, ptrarr{ nullptr } {}
 
