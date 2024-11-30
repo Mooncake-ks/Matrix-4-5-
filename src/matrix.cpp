@@ -4,15 +4,15 @@
 
 Matrix::Matrix() 
 	: 
-	row(0)
-	,col(0)
+	m_row(0)
+	, m_col(0)
 	,m_matrix(nullptr) {
 }
 
 Matrix::Matrix(int row, int col) 
 	: 
-	row(row)
-	,col(col) {
+	m_row(row)
+	, m_col(col) {
 	m_matrix = new double* [row];
 	for (int i = 0; i < row; ++i) {
 		m_matrix[i] = new double[col];
@@ -24,33 +24,33 @@ Matrix::Matrix(int row, int col)
 
 Matrix::Matrix(const Matrix& other) 
 	: 
-	row(other.row)
-	,col(other.col) {
-	m_matrix = creature(row, col);
+	m_row(other.m_row)
+	, m_col(other.m_col) {
+	m_matrix = creature(m_row, m_col);
 	copy(other);
 }
 
 Matrix& Matrix::operator=(const Matrix& other) {
 	clear();
-	row = other.row;
-	col = other.col;
-	m_matrix = creature(row, col);
+	m_row = other.m_row;
+	m_col = other.m_col;
+	m_matrix = creature(m_row, m_col);
 	copy(other);
 	return *this;
 }
 Matrix Matrix::operator*(const Matrix& other) const {
-	Matrix test(row, other.col);
+	Matrix test(m_row, other.m_col);
 
-	if (col == other.row) {
-		for (int i = 0; i < test.row; ++i) {
-			for (int j = 0; j < test.col; ++j) {
+	if (m_col == other.m_row) {
+		for (int i = 0; i < test.m_row; ++i) {
+			for (int j = 0; j < test.m_col; ++j) {
 				test.m_matrix[i][j] = 0;
 			}
 
 		}
-		for (int i = 0; i < test.row; ++i) {
-			for (int j = 0; j < test.col; ++j) {
-				for (int k = 0; k < col; ++k) {
+		for (int i = 0; i < test.m_row; ++i) {
+			for (int j = 0; j < test.m_col; ++j) {
+				for (int k = 0; k < m_col; ++k) {
 					test.m_matrix[i][j] += m_matrix[i][k] * other.m_matrix[k][j];
 				}
 			}
@@ -62,14 +62,14 @@ Matrix Matrix::operator*(const Matrix& other) const {
 	return test;
 }
 Matrix Matrix::operator+(const Matrix& other) const {
-	if (row != other.row || col != other.col) {
+	if (m_row != other.m_row || m_col != other.m_col) {
 		throw "Matrices have different dimensions";
 	}
 
-	Matrix result(row, col);
+	Matrix result(m_row, m_col);
 
-	for (int i = 0; i < row; ++i) {
-		for (int j = 0; j < col; ++j) {
+	for (int i = 0; i < m_row; ++i) {
+		for (int j = 0; j < m_col; ++j) {
 			result.m_matrix[i][j] = m_matrix[i][j] + other.m_matrix[i][j];
 		}
 	}
@@ -77,14 +77,14 @@ Matrix Matrix::operator+(const Matrix& other) const {
 	return result;
 }
 Matrix Matrix::operator-(const Matrix& other) const {
-	if (row != other.row || col != other.col) {
+	if (m_row != other.m_row || m_col != other.m_col) {
 		throw "Matrices have different dimensions";
 	}
 
-	Matrix result(row, col);
+	Matrix result(m_row, m_col);
 
-	for (int i = 0; i < row; ++i) {
-		for (int j = 0; j < col; ++j) {
+	for (int i = 0; i < m_row; ++i) {
+		for (int j = 0; j < m_col; ++j) {
 			result.m_matrix[i][j] = m_matrix[i][j] - other.m_matrix[i][j];
 		}
 	}
@@ -92,12 +92,12 @@ Matrix Matrix::operator-(const Matrix& other) const {
 	return result;
 }
 bool Matrix::operator==(const Matrix& other) const {
-	if (row != other.row || col != other.col) {
+	if (m_row != other.m_row || m_col != other.m_col) {
 		return false;
 	}
 
-	for (int i = 0; i < row; ++i) {
-		for (int j = 0; j < col; ++j) {
+	for (int i = 0; i < m_row; ++i) {
+		for (int j = 0; j < m_col; ++j) {
 			if (m_matrix[i][j] != other.m_matrix[i][j]) {
 				return false;
 			}
@@ -114,13 +114,13 @@ double* Matrix::operator[](int index) {
 	return m_matrix[index];
 }
 void Matrix::clear(Matrix& other) {
-	for (int i = 0; i < other.row; ++i) {
+	for (int i = 0; i < other.m_row; ++i) {
 		delete[] other.m_matrix[i];
 	}
 	delete[] other.m_matrix;
 }
 void Matrix::clear() {
-	for (int i = 0; i < row; ++i) {
+	for (int i = 0; i < m_row; ++i) {
 		delete[] m_matrix[i];
 	}
 	delete[] m_matrix;
@@ -137,20 +137,20 @@ double** Matrix::creature(int row, int col) {
 	return other;
 }
 void Matrix::copy(const Matrix& other) {
-	if (!(row == other.row && col == other.col)) {
+	if (!(m_row == other.m_row && m_col == other.m_col)) {
 		return;
 	}
-	for (int i = 0; i < row; ++i) {
-		for (int j = 0; j < col; ++j) {
+	for (int i = 0; i < m_row; ++i) {
+		for (int j = 0; j < m_col; ++j) {
 			m_matrix[i][j] = other.m_matrix[i][j];
 		}
 	}
 }
 
 void Matrix::transponse() {
-	if (row == col) {
-		for (int i = 0; i < row; ++i) {
-			for (int j = i; j < col; ++j) {
+	if (m_row == m_col) {
+		for (int i = 0; i < m_row; ++i) {
+			for (int j = i; j < m_col; ++j) {
 				if (!(i == j)) {
 					int tmpValue = m_matrix[i][j];
 					m_matrix[i][j] = m_matrix[j][i];
@@ -163,15 +163,15 @@ void Matrix::transponse() {
 	else {
 		Matrix test(*this);
 		clear(*this);
-		m_matrix = creature(col, row);
-		for (int i = 0; i < col; ++i) {
-			for (int j = 0; j < row; ++j) {
+		m_matrix = creature(m_col, m_row);
+		for (int i = 0; i < m_col; ++i) {
+			for (int j = 0; j < m_row; ++j) {
 				m_matrix[i][j] = test[i][j];
 			}
 		}
-		int tmpValue = row;
-		row = col;
-		col = tmpValue;
+		int tmpValue = m_row;
+		m_row = m_col;
+		m_col = tmpValue;
 	}
 }
 Matrix::~Matrix() {
@@ -179,9 +179,9 @@ Matrix::~Matrix() {
 }
 
 void Matrix::print() const {
-	std::cout << "ROW: " <<  row << "\t" << "COL: " << col << "\n";
-	for (int i = 0; i < row; ++i) {
-		for (int j = 0; j < col; ++j) {
+	std::cout << "ROW: " << m_row << "\t" << "COL: " << m_col << "\n";
+	for (int i = 0; i < m_row; ++i) {
+		for (int j = 0; j < m_col; ++j) {
 			std::cout << m_matrix[i][j] << " ";
 		}
 		std::cout << std::endl;
@@ -189,7 +189,8 @@ void Matrix::print() const {
 }
 
 std::istream& operator>>(std::istream& is, Matrix& matrix) {
-	int rows, cols;
+	int rows;
+	int cols;
 	std::cout << "Input rows: ";
 	is >> rows;
 	std::cout << "\nInput cols: ";
@@ -207,8 +208,8 @@ std::istream& operator>>(std::istream& is, Matrix& matrix) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Matrix& matrix) {
-	for (int i = 0; i < matrix.row; ++i) {
-		for (int j = 0; j < matrix.col; ++j) {
+	for (int i = 0; i < matrix.m_row; ++i) {
+		for (int j = 0; j < matrix.m_col; ++j) {
 			os << matrix.m_matrix[i][j];
 			os << " ";
 		}

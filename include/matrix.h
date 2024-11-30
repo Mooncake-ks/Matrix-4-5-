@@ -28,8 +28,8 @@ private:
 	void copy(const Matrix& other);
 	void clear(Matrix& other);
 private:
-	int row;
-	int col;
+	int m_row;
+	int m_col;
 	double** m_matrix;
 };
 
