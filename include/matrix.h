@@ -26,7 +26,8 @@ public:
 	friend std::istream& operator>>(std::istream& is, Matrix& matrix);
 	friend std::ostream& operator<<(std::ostream& os, const Matrix& matrix);
 private:
-	int row, col;
+	int row;
+	int col;
 	double** ptrarr;
 };
 
