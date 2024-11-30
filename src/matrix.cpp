@@ -6,18 +6,18 @@ Matrix::Matrix()
 	: 
 	row(0)
 	,col(0)
-	,ptrarr(nullptr) {
+	,m_matrix(nullptr) {
 }
 
 Matrix::Matrix(int row, int col) 
 	: 
 	row(row)
 	,col(col) {
-	ptrarr = new double* [row];
+	m_matrix = new double* [row];
 	for (int i = 0; i < row; ++i) {
-		ptrarr[i] = new double[col];
+		m_matrix[i] = new double[col];
 		for (int j = 0; j < col; ++j) {
-			ptrarr[i][j] = 0;
+			m_matrix[i][j] = 0;
 		}
 	}
 }
@@ -26,34 +26,32 @@ Matrix::Matrix(const Matrix& other)
 	: 
 	row(other.row)
 	,col(other.col) {
-	ptrarr = creature(row, col);
-	copy(*this, other);
+	m_matrix = creature(row, col);
+	copy(other);
 }
 
 Matrix& Matrix::operator=(const Matrix& other) {
 	clear();
 	row = other.row;
 	col = other.col;
-	ptrarr = creature(row, col);
-	copy(*this, other);
+	m_matrix = creature(row, col);
+	copy(other);
 	return *this;
 }
 Matrix Matrix::operator*(const Matrix& other) const {
-	int sizerow = row;
-	int sizecol = other.col;
-	Matrix test(sizerow, sizecol);
+	Matrix test(row, other.col);
 
 	if (col == other.row) {
-		for (int i = 0; i < sizerow; ++i) {
-			for (int j = 0; j < sizecol; ++j) {
-				test.ptrarr[i][j] = 0;
+		for (int i = 0; i < test.row; ++i) {
+			for (int j = 0; j < test.col; ++j) {
+				test.m_matrix[i][j] = 0;
 			}
 
 		}
-		for (int i = 0; i < sizerow; ++i) {
-			for (int j = 0; j < sizecol; ++j) {
+		for (int i = 0; i < test.row; ++i) {
+			for (int j = 0; j < test.col; ++j) {
 				for (int k = 0; k < col; ++k) {
-					test.ptrarr[i][j] += ptrarr[i][k] * other.ptrarr[k][j];
+					test.m_matrix[i][j] += m_matrix[i][k] * other.m_matrix[k][j];
 				}
 			}
 		}
@@ -72,7 +70,7 @@ Matrix Matrix::operator+(const Matrix& other) const {
 
 	for (int i = 0; i < row; ++i) {
 		for (int j = 0; j < col; ++j) {
-			result.ptrarr[i][j] = ptrarr[i][j] + other.ptrarr[i][j];
+			result.m_matrix[i][j] = m_matrix[i][j] + other.m_matrix[i][j];
 		}
 	}
 
@@ -87,7 +85,7 @@ Matrix Matrix::operator-(const Matrix& other) const {
 
 	for (int i = 0; i < row; ++i) {
 		for (int j = 0; j < col; ++j) {
-			result.ptrarr[i][j] = ptrarr[i][j] - other.ptrarr[i][j];
+			result.m_matrix[i][j] = m_matrix[i][j] - other.m_matrix[i][j];
 		}
 	}
 
@@ -100,7 +98,7 @@ bool Matrix::operator==(const Matrix& other) const {
 
 	for (int i = 0; i < row; ++i) {
 		for (int j = 0; j < col; ++j) {
-			if (ptrarr[i][j] != other.ptrarr[i][j]) {
+			if (m_matrix[i][j] != other.m_matrix[i][j]) {
 				return false;
 			}
 		}
@@ -113,19 +111,19 @@ bool Matrix::operator!=(const Matrix& other) const {
 }
 
 double* Matrix::operator[](int index) {
-	return ptrarr[index];
+	return m_matrix[index];
 }
 void Matrix::clear(Matrix& other) {
 	for (int i = 0; i < other.row; ++i) {
-		delete[] other.ptrarr[i];
+		delete[] other.m_matrix[i];
 	}
-	delete[] other.ptrarr;
+	delete[] other.m_matrix;
 }
 void Matrix::clear() {
 	for (int i = 0; i < row; ++i) {
-		delete[] ptrarr[i];
+		delete[] m_matrix[i];
 	}
-	delete[] ptrarr;
+	delete[] m_matrix;
 }
 double** Matrix::creature(int row, int col) {
 
@@ -138,25 +136,25 @@ double** Matrix::creature(int row, int col) {
 	}
 	return other;
 }
-void Matrix::copy(Matrix& other, const Matrix& other_2) {
-	if (!(other.row == other_2.row && other.col == other_2.col)) {
+void Matrix::copy(const Matrix& other) {
+	if (!(row == other.row && col == other.col)) {
 		return;
 	}
 	for (int i = 0; i < row; ++i) {
 		for (int j = 0; j < col; ++j) {
-			other.ptrarr[i][j] = other_2.ptrarr[i][j];
+			m_matrix[i][j] = other.m_matrix[i][j];
 		}
 	}
 }
 
-void Matrix::transpose() {
+void Matrix::transponse() {
 	if (row == col) {
 		for (int i = 0; i < row; ++i) {
 			for (int j = i; j < col; ++j) {
 				if (!(i == j)) {
-					int tmpValue = ptrarr[i][j];
-					ptrarr[i][j] = ptrarr[j][i];
-					ptrarr[j][i] = tmpValue;
+					int tmpValue = m_matrix[i][j];
+					m_matrix[i][j] = m_matrix[j][i];
+					m_matrix[j][i] = tmpValue;
 				}
 			}
 		}
@@ -165,10 +163,10 @@ void Matrix::transpose() {
 	else {
 		Matrix test(*this);
 		clear(*this);
-		ptrarr = creature(col, row);
+		m_matrix = creature(col, row);
 		for (int i = 0; i < col; ++i) {
 			for (int j = 0; j < row; ++j) {
-				ptrarr[i][j] = test[i][j];
+				m_matrix[i][j] = test[i][j];
 			}
 		}
 		int tmpValue = row;
@@ -180,11 +178,11 @@ Matrix::~Matrix() {
 	clear();
 }
 
-void Matrix::print() {
+void Matrix::print() const {
 	std::cout << "ROW: " <<  row << "\t" << "COL: " << col << "\n";
 	for (int i = 0; i < row; ++i) {
 		for (int j = 0; j < col; ++j) {
-			std::cout << ptrarr[i][j] << " ";
+			std::cout << m_matrix[i][j] << " ";
 		}
 		std::cout << std::endl;
 	}
@@ -211,7 +209,7 @@ std::istream& operator>>(std::istream& is, Matrix& matrix) {
 std::ostream& operator<<(std::ostream& os, const Matrix& matrix) {
 	for (int i = 0; i < matrix.row; ++i) {
 		for (int j = 0; j < matrix.col; ++j) {
-			os << matrix.ptrarr[i][j];
+			os << matrix.m_matrix[i][j];
 			os << " ";
 		}
 		os << "\n";

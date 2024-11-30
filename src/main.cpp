@@ -1,7 +1,8 @@
 ﻿
 #include "matrix.h"
+#include "square_matrix.h"
 
-int main() {
+void testMatrix() {
     {
         std::cout << "-----------------" << "\n";
         std::cout << "OUTPUT CASE: " << "\n";
@@ -137,8 +138,8 @@ int main() {
         test1[1][1] = 4;
 
         std::cout << "test1 before transponse : " << "\n" << test1 << "\n";
-        test1.transpose();
-        std::cout << "test1 after transponse : " << "\n" << test1  << "\n";
+        test1.transponse();
+        std::cout << "test1 after transponse : " << "\n" << test1 << "\n";
     }
 
     {
@@ -160,7 +161,61 @@ int main() {
         std::cin >> test;
         test.print();
     }
+}
 
+void testSquareMatrix() {
+    {
+        std::cout << "-----------------" << "\n";
+        std::cout << "DETERMINANT CASE(SquareMatrix): " << "\n";
+        SquareMatrix test(2);
+        test[0][0] = 1;
+        test[0][1] = 2;
+        test[1][0] = 3;
+        test[1][1] = 4;
+        test.print();
+        std::cout << "\nDeterminant: " << test.determinantGauss() << "\n";
+    }
+
+    {
+        std::cout << "-----------------" << "\n";
+        std::cout << "TRANSPONSE CASE(SquareMatrix): " << "\n";
+        SquareMatrix test(2);
+        test[0][0] = 1;
+        test[0][1] = 2;
+        test[1][0] = 3;
+        test[1][1] = 4;
+        std::cout << "\nBefore transponse: \n" << test << "\n";
+        test.transponse();
+        std::cout << "\nAfter transponse: \n" << test << "\n";
+    }
+
+    {
+        std::cout << "-----------------" << "\n";
+        std::cout << "POWER CASE(SquareMatrix): " << "\n";
+        SquareMatrix test(2);
+        test[0][0] = 1;
+        test[0][1] = 2;
+        test[1][0] = 3;
+        test[1][1] = 4;
+        std::cout << "\nBefore power: \n" << test << "\n";
+        test.matrixPower(0);
+        std::cout << "\nAfter power: \n" << test << "\n";
+    }
+
+    {
+        std::cout << "-----------------" << "\n";
+        std::cout << "FIRST NORM CASE(SquareMatrix): " << "\n";
+        SquareMatrix test(2);
+        test[0][0] = 1;
+        test[0][1] = 2;
+        test[1][0] = 3;
+        test[1][1] = 4;
+        std::cout << "\nMatrix: \n" << test << "\nFirst Norm: " << test.firstNorm() << "\n";
+    }
+}
+int main() {
+    testMatrix();
+    testSquareMatrix();
     return 0;
 }
 

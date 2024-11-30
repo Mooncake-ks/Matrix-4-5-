@@ -7,27 +7,29 @@ public:
 	Matrix(const Matrix& other);
 
 	Matrix& operator =(const Matrix& other);
-	Matrix operator *(const Matrix& other)const;
-	Matrix operator+(const Matrix& other)const;
-	Matrix operator-(const Matrix& other)const;
+	Matrix operator *(const Matrix& other) const;
+	Matrix operator+(const Matrix& other) const;
+	Matrix operator-(const Matrix& other) const;
 	bool operator==(const Matrix& other) const;
 	bool operator!=(const Matrix& other) const;
 	double* operator [](int index);
 
-	void clear(Matrix& other);
-	void clear();
-	double** creature(int row, int col);
-	void copy(Matrix& other, const Matrix& other_2);
-	void transpose();
-
-	~Matrix();
-	void print();
+	virtual void transponse();
+	virtual void print() const;
+	virtual ~Matrix();
 
 	friend std::istream& operator>>(std::istream& is, Matrix& matrix);
 	friend std::ostream& operator<<(std::ostream& os, const Matrix& matrix);
+protected:
+	double** creature(int row, int col);
+
+	virtual void clear();
+private:
+	void copy(const Matrix& other);
+	void clear(Matrix& other);
 private:
 	int row;
 	int col;
-	double** ptrarr;
+	double** m_matrix;
 };
 
