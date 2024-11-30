@@ -180,19 +180,28 @@ Matrix::~Matrix() {
 	clear();
 }
 
+void Matrix::print() {
+	std::cout << "ROW: " <<  row << "\t" << "COL: " << col << "\n";
+	for (int i = 0; i < row; ++i) {
+		for (int j = 0; j < col; ++j) {
+			std::cout << ptrarr[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+}
+
 std::istream& operator>>(std::istream& is, Matrix& matrix) {
 	int rows, cols;
+	std::cout << "Input rows: ";
 	is >> rows;
-	char c;
-	is >> c;
+	std::cout << "\nInput cols: ";
 	is >> cols;
-	is >> c;
 	matrix = Matrix(rows, cols);
 
+	std::cout << "\nInput matrix: \n";
 	for (int i = 0; i < rows; ++i) {
 		for (int j = 0; j < cols; ++j) {
 			is >> matrix[i][j];
-			is >> c;
 		}
 	}
 

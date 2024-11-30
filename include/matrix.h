@@ -21,19 +21,7 @@ public:
 	void transpose();
 
 	~Matrix();
-	void print() {
-		std::cout << row << "\t" << col << "\n";
-		for (int i = 0; i < row; i++)
-		{
-			for (int j = 0; j < col; j++)
-			{
-				std::cout << ptrarr[i][j] << " ";
-			}
-			std::cout << std::endl;
-		}
-
-
-	}
+	void print();
 
 	friend std::istream& operator>>(std::istream& is, Matrix& matrix);
 	friend std::ostream& operator<<(std::ostream& os, const Matrix& matrix);
