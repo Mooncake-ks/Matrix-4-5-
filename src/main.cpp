@@ -173,7 +173,7 @@ void testSquareMatrix() {
         test[1][0] = 3;
         test[1][1] = 4;
         test.print();
-        std::cout << "\nDeterminant: " << test.determinantGauss() << "\n";
+        std::cout << "\nDeterminant: " << test.determinantMinors() << "\n";
     }
 
     {

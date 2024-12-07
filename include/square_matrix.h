@@ -8,7 +8,7 @@ public:
 	SquareMatrix(const SquareMatrix& other);
 
 	void matrixPower(int power);
-	double determinantGauss() const;
+	double determinantMinors() const;
 	double firstNorm() const;
 
 	SquareMatrix& operator=(const SquareMatrix& other);

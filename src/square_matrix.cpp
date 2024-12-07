@@ -25,7 +25,7 @@ SquareMatrix::SquareMatrix(const SquareMatrix& other)
 	copy(other);
 }
 
-double SquareMatrix::determinantGauss() const {
+double SquareMatrix::determinantMinors() const {
 	if (m_size == 0) {
 		return 1.0;
 	}
@@ -33,40 +33,23 @@ double SquareMatrix::determinantGauss() const {
 		return m_matrix[0][0]; // matrix 1x1
 	}
 
-	double det = 1.0;
-	SquareMatrix matrix(*this);
+	double det = 0.0;
+
 	for (int i = 0; i < m_size; ++i) {
-		// find max el in col
-		int maxRow = i;
-		for (int k = i + 1; k < m_size; ++k) {
-			if (std::abs(matrix[k][i]) > std::abs(matrix[maxRow][i])) {
-				maxRow = k;
+		// Calculate the minor for the element in the first row and the ith column
+		SquareMatrix minor(m_size - 1);
+		for (int j = 1; j < m_size; ++j) {
+			for (int k = 0; k < m_size; ++k) {
+				if (k < i) {
+					minor[j - 1][k] = m_matrix[j][k];
+				}
+				else if (k > i) {
+					minor[j - 1][k - 1] = m_matrix[j][k];
+				}
 			}
 		}
-
-		// Rearranging strings (if necessary)
-		if (maxRow != i) {
-			for (int j = 0; j < m_size; ++j) {
-				double tmpValue = matrix[maxRow][j];
-				matrix[maxRow][j] = matrix[i][j];
-				matrix[i][j] = tmpValue;
-			}
-			det *= -1.0;
-		}
-
-		// If the diagonal element is zero, the determinant is zero
-		if (matrix[i][i] == 0.0) {
-			return 0.0;
-		}
-
-		// Making it look triangular
-		det *= matrix[i][i];
-		for (int k = i + 1; k < m_size; ++k) {
-			double factor = matrix[k][i] / matrix[i][i];
-			for (int j = i; j < m_size; ++j) {
-				matrix[k][j] -= factor * matrix[i][j];
-			}
-		}
+		// We add to the determinant taking into account the sign
+		det += (i % 2 == 0 ? 1 : -1) * m_matrix[0][i] * minor.determinantMinors();
 	}
 	return det;
 }
